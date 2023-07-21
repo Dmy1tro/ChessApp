@@ -1,0 +1,66 @@
+<div *ngIf="!hubConnected">
+  <h1>Connecting...</h1>
+</div>
+
+<div *ngIf="hubConnected" class="d-flex flex-column justify-content-center align-content-center gap-2 h-100 w-100 mx-auto p-4">
+  <div class="d-block d-inline-block border-bottom">
+    <h2 class="text-center">Chess</h2>
+  </div>
+
+  <div class="d-flex flex-row gap-1">
+    <div style="flex: 1;">
+      <div class="form-group">
+        <label>Choose color</label>
+        <select [(ngModel)]="playerSide" [disabled]="isSearchingGame || isGameStarted" class="form-select">
+          <option [ngValue]="Side.Undefined" selected>No matter</option>
+          <option [ngValue]="Side.White">White</option>
+          <option [ngValue]="Side.Black">Black</option>
+        </select>
+      </div>
+    
+      <div *ngIf="!isGameStarted" class="d-block d-inline-block mt-1">
+        <button [disabled]="isSearchingGame" class="btn btn-primary" (click)="startGame()">
+          <span *ngIf="isSearchingGame" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Start game
+        </button>
+    
+        <button *ngIf="isSearchingGame" class="ms-1 btn btn-warning" (click)="cancelSearchingGame()">
+          Cancel
+        </button>
+      </div>
+      <div *ngIf="isGameFinished" class="d-flex flex-row gap-5 mt-1">
+        <button class="btn btn-primary" (click)="closeGame()">
+          Close game
+        </button>
+        <h3 style="margin: 0;">{{ matchResult }}</h3>
+      </div>
+    </div>
+
+    <div class="d-flex flex-column justify-content-center align-items-center" style="flex: 3;">
+      <div>
+        <img
+        src="https://t3.ftcdn.net/jpg/05/71/99/86/360_F_571998686_7q0qDN2lvCn5wv90SHEepoffd0Pq8NRY.jpg"
+        [class.chess-img-searching-game]="isSearchingGame"
+        [style.display]="isGameStarted || isGameFinished ? 'none' : ''">
+      </div>
+      
+
+      <div class="mx-auto" [style.display]="isGameStarted ? 'initial' : 'none'">
+        <ngx-chess-board
+          #board
+          [size]="610"
+          [showLastMove]="true"
+          [lightDisabled]="lightDisabled"
+          [darkDisabled]="darkDisabled"
+          (moveChange)="onMoveChange($event)"
+        >
+
+        </ngx-chess-board>
+      </div>
+    </div>
+  </div>
+
+  
+
+  
+</div>
